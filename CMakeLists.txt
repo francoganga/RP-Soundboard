@@ -7,6 +7,8 @@ include(files.cmake)
 # Get prebuilt ffmpeg folders for windows builds
 set(ffmpegIncHint "ffmpeg/include")
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # figure out platform defaults for certain things
 if (WIN32)
 	if(CMAKE_SIZEOF_VOID_P EQUAL 8)

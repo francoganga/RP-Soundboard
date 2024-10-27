@@ -224,6 +224,14 @@ void ConfigModel::setFileNames( int itemId, const QStringList &fns )
 //---------------------------------------------------------------
 const SoundInfo *ConfigModel::getSoundInfo(int itemId) const
 {
+    if(itemId >= 0 && itemId < numSounds())
+		return &sounds()[itemId];
+	return NULL;
+}
+
+
+const SoundInfo *ConfigModel::getSoundInfoRandom(int itemId) const
+{
     if (itemId >= 0 && itemId < numRsounds()) {
         std::srand(static_cast<unsigned>(std::time(nullptr)));
         int soundCount = rsounds()[itemId].size();
@@ -235,9 +243,7 @@ const SoundInfo *ConfigModel::getSoundInfo(int itemId) const
         }
     }
 
-    if(itemId >= 0 && itemId < numSounds())
-		return &sounds()[itemId];
-	return NULL;
+    return getSoundInfo(itemId);
 }
 
 

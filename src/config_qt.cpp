@@ -487,8 +487,15 @@ void ConfigQt::setPlayingLabelIcon(int index)
 //---------------------------------------------------------------
 void ConfigQt::playSound( size_t buttonId )
 {
-	const SoundInfo *info = m_model->getSoundInfo(buttonId);
-	if(info)
+	const SoundInfo *info;
+
+    if (buttonId < m_model->numRsounds()) {
+        info = m_model->getSoundInfoRandom(buttonId);
+    } else {
+        info = m_model->getSoundInfo(buttonId);
+    }
+
+    if(info)
 		sb_playFile(*info);
 }
 

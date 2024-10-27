@@ -63,6 +63,8 @@ public:
     void setFileNames(int itemId, const QStringList &fns);
 
 	const SoundInfo *getSoundInfo(int itemId) const;
+    const SoundInfo *getSoundInfoRandom(int itemId) const;
+
 	void setSoundInfo(int itemId, const SoundInfo &info);
 
 	inline int getRows() const { return m_rows[m_activeConfig]; }
