@@ -102,8 +102,10 @@ private:
 	void setPlayingLabelIcon(int index);
 	void playSound(size_t buttonId);
 	void chooseFile(size_t buttonId);
+    void chooseFiles(size_t buttonId);
 
 	void setButtonFile(size_t buttonId, const QString &fn, bool askForDisablingCrop = true);
+    void setButtonFiles(size_t buttonId, const QStringList &fns);
 
 	void openAdvanced(size_t buttonId);
 	void deleteButton(size_t buttonId);

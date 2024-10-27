@@ -37,6 +37,7 @@ enum button_choices_e {
 	BC_SET_HOTKEY,
 	BC_SET_COLOR,
 	BC_DELETE,
+	BC_CHOOSE_RANDOM,
 };
 
 
@@ -73,6 +74,10 @@ ConfigQt::ConfigQt( ConfigModel *model, QWidget *parent /*= 0*/ ) :
 	actChooseFile->setData((int)BC_CHOOSE);
 	m_buttonContextMenu.addAction(actChooseFile);
 
+    QAction *actChooseFiles = new QAction("Chose multiple files", this);
+	actChooseFiles->setData((int)BC_CHOOSE_RANDOM);
+	m_buttonContextMenu.addAction(actChooseFiles);
+
 	QAction *actAdvancedOpts = new QAction("Advanced Options", this);
 	actAdvancedOpts->setData((int)BC_ADVANCED);
 	m_buttonContextMenu.addAction(actAdvancedOpts);
@@ -88,6 +93,8 @@ ConfigQt::ConfigQt( ConfigModel *model, QWidget *parent /*= 0*/ ) :
 	QAction *actDeleteButton = new QAction("Make button great again (delete)", this);
 	actDeleteButton->setData((int)BC_DELETE);
 	m_buttonContextMenu.addAction(actDeleteButton);
+
+
 
 	createButtons();
 
@@ -441,6 +448,9 @@ void ConfigQt::showButtonContextMenu( const QPoint &point )
 			case BC_CHOOSE: 
 				chooseFile(buttonId); 
 				break;
+            case BC_CHOOSE_RANDOM:
+                chooseFiles(buttonId); 
+                break;
 			case BC_ADVANCED: 
 				openAdvanced(buttonId); 
 				break;
@@ -493,7 +503,15 @@ void ConfigQt::chooseFile( size_t buttonId )
 	if (fn.isNull())
 		return;
 	setButtonFile(buttonId, fn);
+}
 
+void ConfigQt::chooseFiles( size_t buttonId )
+{
+	QString filePath = m_model->getFileName(buttonId);
+	QStringList fns = QFileDialog::getOpenFileNames(this, tr("Choose File"), filePath, tr("Files (*.*)"));
+	if (fns.size() == 0)
+		return;
+	setButtonFiles(buttonId, fns);
 }
 
 
@@ -889,6 +907,10 @@ void ConfigQt::setButtonFile(size_t buttonId, const QString &fn, bool askForDisa
 	m_model->setFileName(buttonId, fn);
 }
 
+void ConfigQt::setButtonFiles(size_t buttonId, const QStringList &fns)
+{
+    m_model->setFileNames(buttonId, fns);
+}
 
 //---------------------------------------------------------------
 // Purpose: 

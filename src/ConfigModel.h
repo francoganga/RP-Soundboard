@@ -60,6 +60,7 @@ public:
 
 	QString getFileName(int itemId) const;
 	void setFileName(int itemId, const QString &fn);
+    void setFileNames(int itemId, const QStringList &fns);
 
 	const SoundInfo *getSoundInfo(int itemId) const;
 	void setSoundInfo(int itemId, const SoundInfo &info);
@@ -107,13 +108,17 @@ public:
 	int getConfiguration();
 
 	const std::vector<SoundInfo> &sounds() const { return m_sounds[m_activeConfig]; }
+    const std::vector<std::vector<SoundInfo>> &rsounds() const { return m_rsounds; }
+
     int numSounds() const { return (int)sounds().size(); }
+    int numRsounds() const { return (int)rsounds().size(); }
 
 	uint getNextUpdateCheck() const { return m_nextUpdateCheck; }
 	void setNextUpdateCheck(uint time);
 
 private:
 	std::vector<SoundInfo> &sounds() { return m_sounds[m_activeConfig]; }
+    std::vector<std::vector<SoundInfo>> &rsounds() { return m_rsounds; }
 	void notify(notifications_e what, int data);
 	std::vector<SoundInfo> getInitialSounds();
 	std::vector<SoundInfo> readConfiguration(QSettings & settings, const QString &name);
@@ -121,6 +126,7 @@ private:
 
 	std::vector<Observer*> m_obs;
 	std::array<std::vector<SoundInfo>, NUM_CONFIGS> m_sounds;
+    std::vector<std::vector<SoundInfo>> m_rsounds;
 	int m_activeConfig;
 
     std::array<int, NUM_CONFIGS> m_rows;

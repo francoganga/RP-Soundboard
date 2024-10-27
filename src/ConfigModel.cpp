@@ -182,6 +182,11 @@ void ConfigModel::setFileName( int itemId, const QString &fn )
 {
 	if(itemId >= 0)
 	{
+        if(itemId < 1000 && itemId < numRsounds()) {
+            rsounds()[itemId].clear();
+        }
+
+
         if(itemId < 1000 && itemId >= numSounds())
 			sounds().resize(itemId + 1);
 		sounds()[itemId].filename = fn;
@@ -191,11 +196,45 @@ void ConfigModel::setFileName( int itemId, const QString &fn )
 }
 
 
+void ConfigModel::setFileNames( int itemId, const QStringList &fns )
+{
+	if(itemId >= 0)
+	{
+	    if(itemId < 1000 && itemId >= numRsounds())
+	    {
+		    rsounds().resize(itemId + 1);
+	    }
+
+	    for (const auto &fn : fns)
+	    {
+            SoundInfo info;
+            info.filename = fn;
+
+            rsounds()[itemId].push_back(info);
+	    }
+
+	    //writeConfig();
+	    //notify(NOTIFY_SET_SOUND, itemId);
+	}
+}
+
+
 //---------------------------------------------------------------
 // Purpose: 
 //---------------------------------------------------------------
 const SoundInfo *ConfigModel::getSoundInfo(int itemId) const
 {
+    if (itemId >= 0 && itemId < numRsounds()) {
+        std::srand(static_cast<unsigned>(std::time(nullptr)));
+        int soundCount = rsounds()[itemId].size();
+
+        if (soundCount > 0) {
+
+            int randomIndex = std::rand() % soundCount;
+            return &rsounds()[itemId][randomIndex];
+        }
+    }
+
     if(itemId >= 0 && itemId < numSounds())
 		return &sounds()[itemId];
 	return NULL;
