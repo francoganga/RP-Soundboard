@@ -294,7 +294,14 @@ CAPI void sb_playButton(int btn)
 {
     if ((NULL != configDialog) && (configDialog->hotkeysEnabled()))
     {
-        const SoundInfo *sound = configModel->getSoundInfo(btn);
+        const SoundInfo *sound;
+
+        if (btn < configModel->numRsounds()) {
+            sound = configModel->getSoundInfoRandom(btn);
+        } else {
+            sound = configModel->getSoundInfo(btn);
+        }
+
         if (sound)
             sb_playFile(*sound);
     }
